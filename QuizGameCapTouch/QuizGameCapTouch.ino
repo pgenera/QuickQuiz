@@ -21,6 +21,7 @@ int maxPins = 4;                    // Max number of pin sets (1 in and 1 out fo
 
 int outputPins[4] = {2, 4, 6, 8}; // The numbers of the LED pins.
 int extraGrounds[4] = {3, 5, 7, 9}; // The numbers of the LED pins.
+bool useExtraGroundsAsOutput = false  // set this to tie outputPin[n] to extraGrounds[n]
 
 //buzzer makes a beep
 int thebuzzer = 11;
@@ -54,8 +55,13 @@ pinMode(thebuzzer, OUTPUT);
     // Initialize the LED pins.
     pinMode(outputPins[i], OUTPUT);  // Make this an output pin.
     digitalWrite(outputPins[i],HIGH);
+    
     pinMode(extraGrounds[i], OUTPUT);  // Make this an output pin.
-digitalWrite(extraGrounds[i],LOW);
+    if (!useExtraGroundsAsOutput) {
+      digitalWrite(extraGrounds[i], LOW);
+    } else {
+      digitalWrite(extraGrounds[i], HIGH);
+    }
     //Initialize the cap touch for all the pins
     refs[i] = ADCTouch.read(inputPins[i], 500);
   }
@@ -120,6 +126,9 @@ void buzz(int p) {
     
     // Set the associated output pin to HIGH thus sending power to the winning button's blinking LED circuit.
   digitalWrite(outputPins[p], HIGH);   // Turn the LEDs on
+  if (useExtraGroundsAsOutput) {
+   digitalWrite(extraGrounds[p], HIGH);
+  }
  
  //Buzz the buzzer the amount of times for the player #
  for(int q=-1; q<p; q++){
