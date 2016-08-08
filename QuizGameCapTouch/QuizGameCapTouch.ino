@@ -21,7 +21,7 @@ int maxPins = 4;                    // Max number of pin sets (1 in and 1 out fo
 
 int outputPins[4] = {2, 4, 6, 8}; // The numbers of the LED pins.
 int extraGrounds[4] = {3, 5, 7, 9}; // The numbers of the LED pins.
-bool useExtraGroundsAsOutput = false  // set this to tie outputPin[n] to extraGrounds[n]
+bool useExtraGroundsAsOutput = true; // set this to tie outputPin[n] to extraGrounds[n]
 
 //buzzer makes a beep
 int thebuzzer = 11;
@@ -149,9 +149,11 @@ void buzz(int p) {
 void reset(){
 
   for (int i = 0; i < maxPins; i++) {
-  digitalWrite(outputPins[i], LOW);    // Turn the LEDs off
-
-    tvalue[i]=false;
+   tvalue[i]=false;
+   digitalWrite(outputPins[i], LOW);    // Turn the LEDs off
+   if (useExtraGroundsAsOutput) {
+    digitalWrite(extraGrounds[p], LOW);
+  }
   }
 
 }
